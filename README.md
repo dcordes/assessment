@@ -14,23 +14,20 @@ Details on the actual API [can be found here](https://github.com/ssllabs/ssllabs
 
 # 2. Usage
 
-## A. For use / production
+## A. To run a security assessment
 
-Build the image, and then invoke locally.
+Just run/pull the image!:
 
-- clone this repo
 - ensure you have local Docker support
-- build the container image:
-  - `docker build -t assessment .`
-- run the built image for the default website target ("www.ssllabs.com"), as a test:
-  - `docker run assessment`
+- run (and pull down if not yet present) the built image for the default website target ("www.ssllabs.com"), as a test:
+  - `docker run dcordes/assessment`
 - and now run it for real, for a website you want:
-  - `docker run -e HOST="www.google.com" assessment`
+  - `docker run -e HOST="www.google.com" dcordes/assessment`
 
 Sample output:
 
 ```
-$ docker run -e HOST="www.google.com" assessment
+$ docker run -e HOST="www.google.com" dcordes/assessment
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 The following is a security report from SSL Labs for the 2 endpoint(s) associated with https://www.google.com.
 
@@ -52,7 +49,7 @@ See the next section for how to alter this default behavior.
 **Note again** that generating a report in non-cached mode will sometimes timeout.  This
 somewhat dependent on what is going on with the servers at SSL Labs.
 
-## B. Usage flags
+## C. Usage flags
 
 Change the default behavior of the assessment application by supplying different flags:
 
@@ -65,12 +62,12 @@ Change the default behavior of the assessment application by supplying different
 
 For example, to see a non-cached report with full report details:
 
-  - `docker run -e HOST="www.google.com" -e CACHED="False" -e RAW_RESULTS="True" assessment`
+  - `docker run -e HOST="www.google.com" -e CACHED="False" -e RAW_RESULTS="True" dcordes/assessment`
 
 Sample output:
 
 ```
-$ docker run -e HOST="www.google.com" -e CACHED="False" -e RAW_RESULTS="True" assessment
+$ docker run -e HOST="www.google.com" -e CACHED="False" -e RAW_RESULTS="True" dcordes/assessment
 Gathering results with a backoff for https://www.google.com................................................................................................................................................................................................................................................Done
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 The following is a security report from SSL Labs for the 2 endpoint(s) associated with https://www.google.com.
@@ -96,6 +93,7 @@ Raw results of the security query:
 }
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ```
+
 
 # 3. Roadmap / Plans for Future Development
 
@@ -172,15 +170,26 @@ Raw results of the security query:
   
 # 4. Project Maintenance
 
-## A. To build for local development
+## A. To build and run for local development
 
-Build as above, or build the development image to keep support for testing:
+Build the image thus:
+
+  - `docker build -t assessment .`
+
+Or like this, to use a development image that has the test suite of tools still installed:
 
   - `docker build -f Dockerfile.dev -t assessment .`
 
-That will produce an image with test suite tools still installed.
+Once built, the image can be run like this (and see discussion above for flags):
 
-## B. Dependency Updates
+  - `docker run assessment`
+
+## B. Pushing up to Docker Hub
+
+- build locally with "latest" tag, and the current git commit tag
+- login and push up to the "dcordes/assessment" repo in Docker Hub
+
+## C. Dependency Updates
 
 To update Python dependencies, regenerate the constraints file and then rebuild the container image.
 

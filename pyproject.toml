@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=67.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "assessment"
+authors = [
+    {name = "Daniel Cordes", email = "dcordes381@gmail.com"},
+]
+description = "Perform an SSLLabs-defined security assessment of a website"
+version = "1.0.0"
+dependencies = [
+    "jinja2",
+    "requests",
+]
+
+[project.scripts]
+app = "assessment.app:main"
+
+[project.optional-dependencies]
+dev = [
+    "bandit",
+    "black",
+    "flake8",
+    "isort",
+    "pylint",
+    "pytest",
+    "pytest-timeout",
+]
+
